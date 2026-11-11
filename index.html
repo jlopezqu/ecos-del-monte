@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Ecos del Monte — Mitos y leyendas de Colombia</title>
+<style>
+  :root { --bone: #e8e0d0; --dim: #9a917f; --blood: #a3261b; --ink: #0a0c0e; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; color: var(--bone); overflow: hidden; font-family: system-ui, 'Segoe UI', sans-serif; user-select: none; }
+  canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .ov { position: fixed; inset: 0; pointer-events: none; }
+  #grain { width: 100%; height: 100%; opacity: .05; mix-blend-mode: screen; }
+  #vignette { background: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,.92) 100%); opacity: .5; }
+  #blood { background: radial-gradient(ellipse at center, transparent 30%, rgba(140,10,5,.85) 100%); opacity: 0; }
+  #flash { background: #fff; opacity: 0; }
+  #fade { background: #000; opacity: 0; transition: opacity .5s linear; }
+  h1, h2, h3, .serif { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+
+  #hud { display: none; }
+  #obj { position: fixed; left: 14px; top: 12px; max-width: 470px; padding: 10px 50px 12px 14px; text-shadow: 0 1px 3px #000, 0 0 8px #000; background: linear-gradient(90deg, rgba(0,0,0,.52), rgba(0,0,0,0)); }
+  #obj-part { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #f0745c; font-weight: 600; }
+  #obj-text { font-size: 17px; margin-top: 5px; line-height: 1.35; }
+  #compass { position: fixed; top: 18px; left: 50%; width: 440px; margin-left: -220px; height: 34px; border-bottom: 1px solid rgba(232,224,208,.4); background: linear-gradient(180deg, rgba(0,0,0,.4), rgba(0,0,0,0)); }
+  #compass span { position: absolute; top: 4px; transform: translateX(-50%); font-size: 12px; color: var(--bone); letter-spacing: .1em; text-shadow: 0 0 4px #000, 0 1px 2px #000; }
+  #compass i { position: absolute; top: 2px; transform: translateX(-50%); font-style: normal; text-align: center; color: #ffd27a; font-size: 11px; line-height: 1.1; text-shadow: 0 0 6px #000; }
+  #compass i::before { content: '◆'; display: block; font-size: 14px; }
+  #compass i.q::before { content: '?'; font-weight: 700; }
+  #compass i.edge { opacity: .55; }
+  #bars { position: fixed; left: 26px; bottom: 24px; width: 190px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+  .bar { height: 5px; background: rgba(255,255,255,.12); margin: 3px 0 9px; }
+  .bar b { display: block; height: 100%; width: 100%; background: var(--bone); }
+  #b-health { background: var(--blood) !important; } #b-batt { background: #ffd27a !important; }
+  #prompt { position: fixed; left: 50%; bottom: 23%; transform: translateX(-50%); padding: 7px 16px; background: rgba(0,0,0,.55); border: 1px solid rgba(232,224,208,.3); font-size: 15px; opacity: 0; transition: opacity .15s; white-space: nowrap; }
+  #sub { position: fixed; left: 50%; bottom: 12%; transform: translateX(-50%); max-width: 760px; text-align: center; font-family: Georgia, serif; font-size: 20px; font-style: italic; text-shadow: 0 2px 6px #000, 0 0 2px #000; opacity: 0; transition: opacity .4s; }
+  #timer { position: fixed; right: 28px; top: 20px; font-family: Georgia, serif; font-size: 34px; color: #ffd27a; display: none; text-shadow: 0 2px 6px #000; }
+  #keys { position: fixed; right: 24px; bottom: 22px; font-size: 11px; color: var(--dim); letter-spacing: .04em; text-align: right; line-height: 1.6; }
+  #dot { position: fixed; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; border-radius: 50%; background: rgba(232,224,208,.5); }
+
+  #dialog { display: none; position: fixed; left: 50%; bottom: 7%; transform: translateX(-50%); width: min(820px, 90vw); background: rgba(6,8,9,.9); border: 1px solid rgba(232,224,208,.28); padding: 20px 26px 16px; }
+  #dlg-who { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--blood); font-weight: 600; min-height: 15px; }
+  #dlg-text { font-family: Georgia, serif; font-size: 20px; line-height: 1.5; margin-top: 8px; }
+  #dialog.note { background: rgba(226,217,191,.96); color: #1c1610; border-color: #1c1610; }
+  #dialog.note #dlg-who { color: #5a2a1a; } #dialog.note #dlg-hint { color: #5a5040; }
+  #dlg-hint { text-align: right; font-size: 11px; color: var(--dim); margin-top: 12px; letter-spacing: .06em; }
+
+  .full { display: none; position: fixed; inset: 0; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+  #card { background-color: #040506; background-size: cover; background-position: center; padding: 0 8vw; cursor: pointer; }
+  #card-credit { position: absolute; right: 16px; bottom: 12px; max-width: 70vw; text-align: right; font-size: 10px; color: var(--dim); letter-spacing: .03em; }
+  #card-kicker { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--blood); font-weight: 600; }
+  #card-title { font-size: clamp(42px, 7vw, 86px); margin: 14px 0 22px; }
+  #card-lines p { font-family: Georgia, serif; font-size: 20px; color: #c9c0ad; margin: 8px 0; max-width: 780px; line-height: 1.45; }
+  #card-lines p:first-child { color: var(--dim); font-family: system-ui, sans-serif; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
+  #card-hint { margin-top: 38px; font-size: 12px; color: var(--dim); letter-spacing: .1em; }
+
+  #menu { background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.25) 40%, rgba(0,0,0,.8)); }
+  #menu h1 { font-size: clamp(48px, 9vw, 120px); margin: 0; letter-spacing: .02em; text-shadow: 0 4px 30px #000; }
+  #menu .tag { font-size: 14px; letter-spacing: .28em; text-transform: uppercase; color: var(--dim); margin: 10px 0 44px; }
+  button { font: inherit; color: var(--bone); background: rgba(0,0,0,.5); border: 1px solid rgba(232,224,208,.35); padding: 12px 34px; margin: 6px; min-width: 250px; font-size: 16px; letter-spacing: .06em; cursor: pointer; pointer-events: auto; }
+  button:hover:not(:disabled) { background: var(--blood); border-color: var(--blood); }
+  button:disabled { opacity: .3; cursor: default; }
+  #menu-chapters { display: none; width: min(980px, 94vw); max-height: 84vh; overflow-y: auto; text-align: left; background: rgba(4,5,6,.86); border: 1px solid rgba(232,224,208,.2); padding: 22px 28px; pointer-events: auto; }
+  .chap { border-top: 1px solid rgba(232,224,208,.15); padding: 14px 0; }
+  .chap.locked { opacity: .45; }
+  .chap h3 { margin: 0; font-size: 24px; } .chap h3 small { font-family: system-ui, sans-serif; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--blood); margin-right: 10px; }
+  .chap .meta { font-size: 12px; color: var(--dim); letter-spacing: .05em; margin: 4px 0; }
+  .chap p { margin: 6px 0 8px; font-family: Georgia, serif; color: #c9c0ad; }
+  .parts button { min-width: 0; padding: 6px 11px; margin: 3px 4px 3px 0; font-size: 12px; }
+  .help { font-size: 12px; color: var(--dim); margin-top: 30px; letter-spacing: .05em; line-height: 1.7; }
+
+  #journal { background: rgba(4,5,6,.93); align-items: stretch; text-align: left; }
+  #journal-body { width: min(860px, 92vw); margin: 0 auto; padding: 46px 10px; overflow-y: auto; }
+  #journal-body h2 { font-size: 34px; margin: 0 0 4px; } #journal-body h3 { color: var(--blood); font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; margin: 26px 0 6px; font-weight: 600; }
+  #journal-body p { font-family: Georgia, serif; font-size: 17px; line-height: 1.55; margin: 6px 0; color: #d5ccba; } #journal-body .dim { color: var(--dim); font-family: system-ui, sans-serif; font-size: 13px; }
+  #pause, #dead { background: rgba(0,0,0,.72); cursor: pointer; pointer-events: auto; }
+  #dead { background: rgba(40,2,0,.86); }
+  #pause h2, #dead h2 { font-size: 46px; margin: 0 0 10px; } #pause p, #dead p { color: var(--dim); letter-spacing: .08em; }
+  #err { display: none; position: fixed; left: 0; top: 0; right: 0; max-height: 50vh; overflow: auto; background: #400; color: #fff; font: 12px/1.4 monospace; padding: 10px; white-space: pre-wrap; z-index: 99; }
+  #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; color: var(--dim); letter-spacing: .2em; font-size: 13px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="ov" id="vignette"></div>
+<div class="ov" id="blood"></div>
+<canvas class="ov" id="grain" width="320" height="180"></canvas>
+<div class="ov" id="flash"></div>
+
+<div id="hud">
+  <div id="dot"></div>
+  <div id="obj"><div id="obj-part"></div><div id="obj-text"></div></div>
+  <div id="compass"></div>
+  <div id="timer"></div>
+  <div id="bars">
+    Salud<div class="bar"><b id="b-health"></b></div>
+    Aliento<div class="bar"><b id="b-stam"></b></div>
+    Linterna<div class="bar"><b id="b-batt"></b></div>
+  </div>
+  <div id="prompt"></div>
+  <div id="sub"></div>
+  <div id="keys">WASD mover · Shift correr · C agacharse<br>E usar · F linterna · Tab diario</div>
+</div>
+
+<div id="dialog"><div id="dlg-who"></div><div id="dlg-text"></div><div id="dlg-hint">E · Espacio · clic</div></div>
+<div class="ov" id="fade"></div>
+
+<div class="full" id="journal"><div id="journal-body"></div></div>
+<div class="full" id="pause"><h2 class="serif">En pausa</h2><p>Clic para volver al monte</p></div>
+<div class="full" id="dead"><h2 class="serif">Le contestaste al monte</h2><p>Clic o Enter para volver a intentarlo</p></div>
+<div class="full" id="card"><div id="card-kicker"></div><h1 id="card-title"></h1><div id="card-lines"></div><div id="card-hint"></div><div id="card-credit"></div></div>
+
+<div class="full" id="menu">
+  <div id="menu-main">
+    <h1>Ecos del Monte</h1>
+    <div class="tag">Mitos y leyendas de Colombia</div>
+    <div><button id="btn-continue">Continuar</button></div>
+    <div><button id="btn-new">Nueva partida</button></div>
+    <div><button id="btn-chapters">Capítulos</button></div>
+    <div class="help">WASD mover · ratón mirar · Shift correr · E usar · F linterna · Tab diario<br>Juega con audífonos y a oscuras.</div>
+  </div>
+  <div id="menu-chapters"><div id="chapter-list"></div><button id="btn-back">Volver</button></div>
+</div>
+<div id="loading">Abriendo trocha…</div>
+<div id="err"></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

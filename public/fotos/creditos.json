@@ -1,0 +1,30 @@
+{
+ "bogota": [
+  {
+   "src": "fotos/bogota1.jpg",
+   "title": "2019 Bogotá - Edificio en La Candelaria (cra 3 calle 12 A)",
+   "credit": "Felipe Restrpo Acosta · CC BY-SA 4.0 · Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:2019_Bogot%C3%A1_-_Edificio_en_La_Candelaria_(cra_3_calle_12_A).jpg"
+  },
+  {
+   "src": "fotos/bogota2.jpg",
+   "title": "Bogotá, Cerros Monserrate y Guadalupe - panoramio",
+   "credit": "Alonso Cárdenas · CC BY-SA 3.0 · Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Bogot%C3%A1,_Cerros_Monserrate_y_Guadalupe_-_panoramio.jpg"
+  }
+ ],
+ "tolima": [
+  {
+   "src": "fotos/tolima3.jpg",
+   "title": "Panorámica nocturna de parte de la ciudad de Ibagué",
+   "credit": "rz · CC BY-SA 3.0 · Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica_nocturna_de_parte_de_la_ciudad_de_Ibagu%C3%A9.jpg"
+  },
+  {
+   "src": "fotos/tolima1.jpg",
+   "title": "Paisaje mañanero de la Cordillera Central y del Nevado del Tolima (41811613732)",
+   "credit": "Alejandro  Bayer Tamayo from Armenia, Colombia · CC BY-SA 2.0 · Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Paisaje_ma%C3%B1anero_de_la_Cordillera_Central_y_del_Nevado_del_Tolima_(41811613732).jpg"
+  }
+ ]
+}
