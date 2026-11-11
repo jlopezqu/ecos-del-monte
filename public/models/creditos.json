@@ -1,0 +1,60 @@
+{
+ "verificado": "2026-11-11",
+ "fuente_comun": "Mesh2Motion (https://github.com/Mesh2Motion/mesh2motion-app, rama main). LICENSE-CC0.MD: 'All 3d models, blend files, rigs, animations' CC0 1.0. Licencia por modelo en src/lib/RigConfig.ts (por defecto 'CC0' si no se indica).",
+ "modelos": [
+  {
+   "archivo": "personas/campesino.glb, personas/campesino-viejo.glb, personas/campesina.glb, personas/campesina-vieja.glb",
+   "nombre": "Personas generadas con MPFB 2.0.18 (MakeHuman para Blender) y atadas al esqueleto de Mesh2Motion",
+   "autor": "Assets de la comunidad MakeHuman (makehuman_system_assets: cuerpo base, proxies male_generic/female_generic, pieles middleage/old caucasian, ropa male_casualsuit01, male_casualsuit03, female_elegantsuit01, zapatos shoes01/shoes04, pelo short01/short02/braid01/bob02, cejas, ojos low-poly); esqueleto Mesh2Motion (CC0)",
+   "licencia": "CC0 1.0",
+   "url": "https://static.makehumancommunity.org/assets/assetpacks/makehuman_system_assets.html",
+   "url_zip": "https://files2.makehumancommunity.org/asset_packs/makehuman_system_assets/makehuman_system_assets_cc0.zip",
+   "nota": "El código de MPFB es GPL-3.0, pero solo se usa como herramienta; lo publicado son mallas y texturas del paquete CC0. Script: tools/blender/generar_persona.py"
+  },
+  {
+   "archivo": "maniqui.glb",
+   "nombre": "mannequin-female",
+   "autor": "Mesh2Motion (sin atribución a terceros en RigConfig.ts)",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/blob/main/static/assets/human/variations/mannequin-female.glb"
+  },
+  {
+   "archivo": "anim/*.glb",
+   "nombre": "Animaciones humanas idle-a, idle-subtle, walk, walk-female, idle-talking, pray, sitting-idle, walk-cautious, idle-lantern",
+   "autor": "Mesh2Motion (Scott Petrovic)",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/tree/main/static/assets/human/animations"
+  },
+  {
+   "archivo": "perro.glb",
+   "nombre": "fox/variations/dog",
+   "autor": "Mesh2Motion (sin atribución a terceros)",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/blob/main/static/assets/fox/variations/dog.glb"
+  },
+  {
+   "archivo": "anim-perro/*.glb",
+   "nombre": "fox idle, walk",
+   "autor": "Mesh2Motion",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/tree/main/static/assets/fox/animations"
+  },
+  {
+   "archivo": "mula.glb",
+   "nombre": "horse/model (caballo, usado como mula)",
+   "autor": "Mesh2Motion (sin atribución a terceros)",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/blob/main/static/assets/horse/model.glb"
+  },
+  {
+   "archivo": "anim-mula/*.glb",
+   "nombre": "horse idle, walk",
+   "autor": "Mesh2Motion",
+   "licencia": "CC0 1.0",
+   "url": "https://github.com/Mesh2Motion/mesh2motion-app/tree/main/static/assets/horse/animations"
+  }
+ ],
+ "descartados": {
+  "assets-src/modelos-descartados/": "hombre-jay.glb (CC-BY 4.0) y mujer-sintel.glb (CC-BY 3.0) ya no se publican (2026-11-11)"
+ }
+}

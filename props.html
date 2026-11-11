@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Prueba de objetos (props)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #222; overflow: hidden; font-family: sans-serif; }
+  #err { position: fixed; left: 6px; bottom: 6px; color: #f66; font-size: 12px; white-space: pre; z-index: 2; }
+  #info { position: fixed; left: 6px; top: 6px; color: #eee; font-size: 12px; z-index: 2; }
+</style>
+</head>
+<body>
+<div id="info">cargando…</div>
+<div id="err"></div>
+<script type="module">
+  // Página de prueba: todos los objetos de public/props en cuadrícula con su nombre y una figura de 1,7 m.
+  // Parámetros: ?only=mesa,silla  ?view=front|side|top|back  ?cols=8  ?gap=2.6  ?zoom=1
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { loadProps, makeProp, propSize, hasProp } from './src/props.js';
+
+  const err = document.getElementById('err');
+  addEventListener('error', (e) => { err.textContent += (e.message || e) + '\n'; });
+  addEventListener('unhandledrejection', (e) => { err.textContent += 'promesa: ' + (e.reason?.message || e.reason) + '\n'; });
+  const ow = console.warn; console.warn = (...a) => { err.textContent += a.join(' ') + '\n'; ow(...a); };
+
+  const q = new URLSearchParams(location.search);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  document.body.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x9fb8c8);
+  scene.add(new THREE.HemisphereLight(0xdfefff, 0x6a5a40, 1.4));
+  const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+  sun.position.set(8, 14, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -15, right: 15, top: 15, bottom: -15, far: 50 });
+  scene.add(sun);
+
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshStandardMaterial({ color: 0x8a7a5e }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+  const grid = new THREE.GridHelper(60, 60, 0x554433, 0x6f6048);
+  grid.position.y = 0.002;
+  scene.add(grid);
+
+  function label(text, w = +(q.get("lw") || 1.6)) {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 48;
+    const g = c.getContext('2d');
+    g.fillStyle = 'rgba(0,0,0,.6)'; g.fillRect(0, 0, 256, 48);
+    g.fillStyle = '#fff'; g.font = 'bold 26px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(text, 128, 25);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, depthTest: false }));
+    s.scale.set(w, w * 48 / 256, 1);
+    return s;
+  }
+
+  function figure() {
+    // Figura de referencia de 1,70 m, con nariz roja hacia +z (frente).
+    const g = new THREE.Group();
+    const m = new THREE.MeshStandardMaterial({ color: 0x3060c0 });
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 1.0, 4, 12), m);
+    body.position.y = 0.2 + 0.5; g.add(body);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), m);
+    head.position.y = 1.58; g.add(head);
+    const nose = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.1), new THREE.MeshStandardMaterial({ color: 0xff2020 }));
+    nose.position.set(0, 1.58, 0.14); g.add(nose);
+    g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+    return g;
+  }
+
+  const index = await fetch('./props/index.json').then((r) => r.json()).catch(() => []);
+  let names = index.map((e) => e.name);
+  if (q.get('only')) names = q.get('only').split(',');
+  const t0 = performance.now();
+  const n = await loadProps(names);
+  const ms = Math.round(performance.now() - t0);
+
+  const cols = +(q.get('cols') || 8), gap = +(q.get('gap') || 2.6);
+  const rows = Math.ceil((names.length + 1) / cols);
+  const items = [{ name: 'figura 1,70 m', obj: figure() }, ...names.map((nm) => ({ name: nm, obj: makeProp(nm) }))];
+  items.forEach((it, i) => {
+    const cx = (i % cols - (cols - 1) / 2) * gap, cz = (Math.floor(i / cols) - (rows - 1) / 2) * gap;
+    if (!it.obj) { err.textContent += 'falta ' + it.name + '\n'; return; }
+    it.obj.position.set(cx, 0, cz);
+    scene.add(it.obj);
+    const h = it.name.startsWith('figura') ? 1.7 : (propSize(it.name)?.[1] ?? 1);
+    const lb = label(it.name); lb.position.set(cx, h + 0.25, cz); scene.add(lb);
+    // marca del frente (+z) en el suelo
+    const mk = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.01, 0.3), new THREE.MeshBasicMaterial({ color: 0xff3030 }));
+    mk.position.set(cx, 0.006, cz + gap * 0.42); scene.add(mk);
+  });
+
+  const W = cols * gap, D = rows * gap, zoom = +(q.get('zoom') || 1);
+  const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.05, 200);
+  const v = q.get('view') || 'front';
+  const dist = Math.max(W * 0.95, D * 1.6) / zoom;
+  if (v === 'side') camera.position.set(dist, dist * 0.35, 0);
+  else if (v === 'top') camera.position.set(0, dist * 1.2, 0.01);
+  else if (v === 'back') camera.position.set(0, dist * 0.45, -dist * 0.8);
+  else camera.position.set(0, dist * 0.45, dist * 0.8);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.4, 0); controls.update();
+
+  let tris = 0; renderer.render(scene, camera); tris = renderer.info.render.triangles;
+  document.getElementById('info').textContent = `${n}/${names.length} objetos en ${ms} ms · ${tris} triángulos en pantalla`;
+  window.__props = { loaded: n, total: names.length, tris };
+  renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+  addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+</script>
+</body>
+</html>

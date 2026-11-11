@@ -224,5 +224,29 @@ export class AudioSys {
   rooster() {
     [[520, 780], [780, 760], [760, 900], [900, 500]].forEach((p, i) => setTimeout(() => this.tone({ type: 'sawtooth', f: p, dur: i === 3 ? 0.7 : 0.22, vol: 0.07, echo: 0.5, filter: ['bandpass', 1500, 2] }), i * 230));
   }
+  // Motor: dos osciladores que suben de tono con las revoluciones (rpm de 0 a 1).
+  engine(on, rpm = 0, kind = 'jeep') {
+    if (!this.ctx) return;
+    if (!this.eng) {
+      if (!on) return;
+      const ctx = this.ctx, g = ctx.createGain(); g.gain.value = 0;
+      const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 500;
+      const o1 = ctx.createOscillator(); o1.type = 'sawtooth';
+      const o2 = ctx.createOscillator(); o2.type = 'square';
+      const g2 = ctx.createGain(); g2.gain.value = 0.5;
+      o1.connect(f); o2.connect(g2); g2.connect(f); f.connect(g); g.connect(this.master); o1.start(); o2.start();
+      this.eng = { g, f, o1, o2 };
+    }
+    const t = this.ctx.currentTime, fr = (kind === 'moto' ? 70 : kind === 'chiva' ? 30 : 42) + rpm * (kind === 'moto' ? 150 : 85);
+    this.eng.o1.frequency.setTargetAtTime(fr, t, 0.06); this.eng.o2.frequency.setTargetAtTime(fr * 0.5, t, 0.06);
+    this.eng.f.frequency.setTargetAtTime(380 + rpm * 900, t, 0.1);
+    this.eng.g.gain.setTargetAtTime(on ? 0.05 + rpm * 0.05 : 0, t, 0.15);
+  }
+  horn(kind = 'jeep') {
+    const f = kind === 'chiva' ? [330, 415] : kind === 'moto' ? [620, 622] : [392, 494];
+    f.forEach((x) => this.tone({ type: 'square', f: [x, x], dur: 0.45, vol: 0.07, filter: ['lowpass', 1800, 1] }));
+  }
+  creak(pan = 0) { this.tone({ type: 'sawtooth', f: [90, 150, 70], dur: 0.5, vol: 0.045, pan, filter: ['bandpass', 700, 6] }); }
+  coin() { this.tone({ f: [1320, 1760], dur: 0.12, vol: 0.06 }); setTimeout(() => this.tone({ f: [1760, 2100], dur: 0.14, vol: 0.05 }), 90); }
   bird(pan = 0) { this.tone({ f: [2200 + Math.random() * 900, 3200, 2500], dur: 0.18, vol: 0.035, pan }); }
 }

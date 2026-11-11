@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Prueba de la gente del juego</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#222}#err{position:fixed;left:8px;top:8px;color:#f66;font:13px monospace;white-space:pre-wrap;max-width:90vw}#info{position:fixed;left:8px;bottom:8px;color:#111;font:12px monospace;white-space:pre-wrap}</style>
+</head>
+<body>
+<div id="err"></div>
+<div id="info"></div>
+<script type="module">
+// Herramienta de desarrollo: los personajes del juego tal como los arma makePerson() (personas reales vestidas por people.js).
+// ?fila=0 personajes de la historia · ?fila=1 vecinos · ?ry=grados · ?a=walk|talk|sit|lantern · ?t=segundos · ?zoom=1 (cabezas)
+// ?noche=1 (luz de linterna) · ?q=low (figuras hechas por código)
+import * as THREE from 'three';
+import { loadTextures, GFX } from './src/world.js';
+import { applyTextures, makePerson } from './src/entities.js';
+import { loadModels } from './src/models.js';
+import { PATASOLA } from './src/chapters/patasola.js';
+import { LOOKS } from './src/life.js';
+
+const err = document.getElementById('err'), info = document.getElementById('info');
+window.addEventListener('error', (e) => { err.textContent += 'error: ' + e.message + '\n'; });
+window.addEventListener('unhandledrejection', (e) => { err.textContent += 'promise: ' + (e.reason?.stack || e.reason) + '\n'; });
+const Q = new URLSearchParams(location.search);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const night = Q.has('noche');
+scene.background = new THREE.Color(night ? 0x05070a : 0x9fb2c0);
+const zoom = Q.has('zoom');
+const cam = new THREE.PerspectiveCamera(zoom ? 13 : 24, innerWidth / innerHeight, 0.1, 100);
+if (zoom) { cam.position.set(0, 1.5, 12); cam.lookAt(0, 1.42, 0); } else { cam.position.set(0, 1.25, 12.5); cam.lookAt(0, 0.86, 0); }
+scene.add(new THREE.HemisphereLight(0xffffff, 0x554433, night ? 0.12 : 1.1));
+if (night) {
+  const sp = new THREE.SpotLight(0xfff0d0, 400, 40, 0.5, 0.6, 1.6); sp.position.set(0.5, 1.6, 9); sp.target.position.set(0, 1, 0); sp.castShadow = true; scene.add(sp, sp.target);
+} else {
+  const sun = new THREE.DirectionalLight(0xfff4e0, 2.0); sun.position.set(3, 6, 5); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 4, bottom: -2 }); scene.add(sun);
+}
+const piso = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshStandardMaterial({ color: 0x6b5a3e })); piso.rotation.x = -Math.PI / 2; piso.receiveShadow = true; scene.add(piso);
+
+await loadTextures(); applyTextures();
+const ok = GFX.hi && (await loadModels({ people: ['campesino', 'campesino-viejo', 'campesina', 'campesina-vieja'], animals: false }));
+const JOURNO = { cloth: 0x6f7480, pants: 0x2a2a30, skin: 0xb98a64, hair: 0x1a1410, hat: 0x4a4238, city: true };
+const filas = [
+  [['periodista', JOURNO], ...Object.entries(PATASOLA.npcs).map(([id, d]) => [id, d.look])],
+  LOOKS.map((l, i) => ['vecino ' + i, l]),
+];
+const lista = filas[+(Q.get('fila') || 0)], items = [];
+lista.forEach(([name, look], i) => {
+  const m = makePerson({ ...look, sit: Q.get('a') === 'sit', animated: true });
+  m.position.x = (i - (lista.length - 1) / 2) * (zoom ? 0.62 : 1.05);
+  m.rotation.y = (+(Q.get('ry') || 0) * Math.PI) / 180;
+  scene.add(m); items.push(m);
+  const a = m.userData.actor;
+  if (a) { if (Q.get('a') && Q.get('a') !== 'sit') a.play(Q.get('a'), 0); a.update(+(Q.get('t') || 0.01)); }
+});
+info.textContent = 'modelos: ' + ok + ' | ' + lista.map((l) => l[0]).join(', ');
+window.__items = items; window.__listo = true; window.__r = renderer;
+renderer.setAnimationLoop(() => renderer.render(scene, cam));
+</script>
+</body>
+</html>

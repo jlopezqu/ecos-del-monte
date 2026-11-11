@@ -34,7 +34,27 @@
   #b-health { background: var(--blood) !important; } #b-batt { background: #ffd27a !important; }
   #prompt { position: fixed; left: 50%; bottom: 23%; transform: translateX(-50%); padding: 7px 16px; background: rgba(0,0,0,.55); border: 1px solid rgba(232,224,208,.3); font-size: 15px; opacity: 0; transition: opacity .15s; white-space: nowrap; }
   #sub { position: fixed; left: 50%; bottom: 12%; transform: translateX(-50%); max-width: 760px; text-align: center; font-family: Georgia, serif; font-size: 20px; font-style: italic; text-shadow: 0 2px 6px #000, 0 0 2px #000; opacity: 0; transition: opacity .4s; }
-  #timer { position: fixed; right: 28px; top: 20px; font-family: Georgia, serif; font-size: 34px; color: #ffd27a; display: none; text-shadow: 0 2px 6px #000; }
+  #minimap { position: fixed; right: 18px; top: 16px; width: 184px; height: 184px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(232,224,208,.4), 0 4px 18px rgba(0,0,0,.65); }
+  #clock { position: fixed; right: 18px; top: 207px; width: 184px; text-align: center; font-size: 13px; letter-spacing: .1em; color: var(--bone); text-shadow: 0 1px 3px #000, 0 0 6px #000; }
+  #speedo { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%); font-family: Georgia, serif; font-size: 26px; color: #ffd27a; text-shadow: 0 2px 6px #000; display: none; }
+  #bigmap { background: rgba(4,5,6,.94); pointer-events: auto; }
+  #mapc { max-height: 84vh; max-width: 92vw; border: 1px solid rgba(232,224,208,.3); cursor: crosshair; }
+  #bigmap p { color: var(--dim); letter-spacing: .08em; font-size: 13px; margin: 12px 0 0; }
+  #hotbar { position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%); display: flex; gap: 6px; font-size: 11px; color: var(--bone); }
+  #hotbar span { background: rgba(0,0,0,.5); border: 1px solid rgba(232,224,208,.25); padding: 4px 8px; white-space: nowrap; }
+  #hotbar span.z { opacity: .35; } #hotbar b { color: #ffd27a; margin-right: 5px; }
+  #shop { background: rgba(4,5,6,.9); pointer-events: auto; }
+  #shop .panel { width: min(700px, 92vw); text-align: left; }
+  #shop h2 { font-size: 34px; margin: 0; } #shop-money { color: #ffd27a; font-size: 20px; margin: 4px 0 14px; font-family: Georgia, serif; }
+  .good { display: flex; align-items: center; gap: 14px; border-top: 1px solid rgba(232,224,208,.15); padding: 9px 0; }
+  .good > b { color: #ffd27a; width: 14px; } .good div { flex: 1; } .good span { display: block; font-size: 17px; font-family: Georgia, serif; }
+  .good small { color: var(--dim); } .good em { font-style: normal; color: var(--dim); font-size: 12px; white-space: nowrap; }
+  .good button { min-width: 84px; padding: 7px 10px; margin: 0; } .good.no button { opacity: .35; }
+  #shop p { color: var(--dim); font-size: 12px; letter-spacing: .06em; margin: 14px 0 8px; }
+  #choice { display: none; position: fixed; left: 50%; bottom: 9%; transform: translateX(-50%); width: min(580px, 90vw); background: rgba(6,8,9,.92); border: 1px solid rgba(232,224,208,.28); padding: 16px 20px; flex-direction: column; pointer-events: auto; }
+  #choice-title { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #f0745c; font-weight: 600; margin-bottom: 8px; }
+  #choice-list button { display: block; width: 100%; min-width: 0; text-align: left; margin: 4px 0; padding: 9px 12px; font-size: 15px; } #choice-list b { color: #ffd27a; margin-right: 10px; }
+  #timer { position: fixed; right: 18px; top: 232px; width: 184px; text-align: center; font-family: Georgia, serif; font-size: 34px; color: #ffd27a; display: none; text-shadow: 0 2px 6px #000; }
   #keys { position: fixed; right: 24px; bottom: 22px; font-size: 11px; color: var(--dim); letter-spacing: .04em; text-align: right; line-height: 1.6; }
   #dot { position: fixed; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; border-radius: 50%; background: rgba(232,224,208,.5); }
 
@@ -73,7 +93,7 @@
   #journal-body { width: min(860px, 92vw); margin: 0 auto; padding: 46px 10px; overflow-y: auto; }
   #journal-body h2 { font-size: 34px; margin: 0 0 4px; } #journal-body h3 { color: var(--blood); font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; margin: 26px 0 6px; font-weight: 600; }
   #journal-body p { font-family: Georgia, serif; font-size: 17px; line-height: 1.55; margin: 6px 0; color: #d5ccba; } #journal-body .dim { color: var(--dim); font-family: system-ui, sans-serif; font-size: 13px; }
-  #pause, #dead { background: rgba(0,0,0,.72); cursor: pointer; pointer-events: auto; }
+  #pause, #dead { background: rgba(0,0,0,.72); cursor: default; pointer-events: auto; }
   #dead { background: rgba(40,2,0,.86); }
   #pause h2, #dead h2 { font-size: 46px; margin: 0 0 10px; } #pause p, #dead p { color: var(--dim); letter-spacing: .08em; }
   #err { display: none; position: fixed; left: 0; top: 0; right: 0; max-height: 50vh; overflow: auto; background: #400; color: #fff; font: 12px/1.4 monospace; padding: 10px; white-space: pre-wrap; z-index: 99; }
@@ -91,6 +111,10 @@
   <div id="dot"></div>
   <div id="obj"><div id="obj-part"></div><div id="obj-text"></div></div>
   <div id="compass"></div>
+  <canvas id="minimap" width="184" height="184"></canvas>
+  <div id="clock"></div>
+  <div id="speedo"></div>
+  <div id="hotbar"></div>
   <div id="timer"></div>
   <div id="bars">
     Salud<div class="bar"><b id="b-health"></b></div>
@@ -99,15 +123,18 @@
   </div>
   <div id="prompt"></div>
   <div id="sub"></div>
-  <div id="keys">WASD mover · Shift correr · C agacharse<br>E usar · F linterna · Tab diario</div>
+  <div id="keys">WASD mover · Shift correr · C agacharse<br>E usar o hablar · F linterna · Tab diario · Esc pausa<br>V cámara · M mapa · 1 a 6 insumos</div>
 </div>
 
 <div id="dialog"><div id="dlg-who"></div><div id="dlg-text"></div><div id="dlg-hint">E · Espacio · clic</div></div>
 <div class="ov" id="fade"></div>
 
 <div class="full" id="journal"><div id="journal-body"></div></div>
-<div class="full" id="pause"><h2 class="serif">En pausa</h2><p>Clic para volver al monte</p></div>
-<div class="full" id="dead"><h2 class="serif">Le contestaste al monte</h2><p>Clic o Enter para volver a intentarlo</p></div>
+<div class="full" id="shop"><div class="panel"><h2 class="serif">Tienda La Esperanza</h2><div id="shop-money"></div><div id="shop-list"></div><p>Teclas 1 a 6 para comprar · Esc para salir</p><button id="shop-close">Salir de la tienda</button></div></div>
+<div id="choice"><div id="choice-title"></div><div id="choice-list"></div></div>
+<div class="full" id="bigmap"><canvas id="mapc" width="860" height="860"></canvas><p>Clic: marcar destino · Clic derecho: quitarlo · M o Esc: cerrar</p></div>
+<div class="full" id="pause"><h2 class="serif">En pausa</h2><div><button id="btn-resume">Seguir jugando</button></div><div><button id="btn-tomenu">Volver al menú de inicio</button></div><p>El avance se guarda al empezar cada parte</p></div>
+<div class="full" id="dead"><h2 class="serif">Le contestaste al monte</h2><div><button id="btn-retry">Volver a intentarlo</button></div><div><button id="btn-dead-menu">Volver al menú de inicio</button></div></div>
 <div class="full" id="card"><div id="card-kicker"></div><h1 id="card-title"></h1><div id="card-lines"></div><div id="card-hint"></div><div id="card-credit"></div></div>
 
 <div class="full" id="menu">
@@ -117,7 +144,9 @@
     <div><button id="btn-continue">Continuar</button></div>
     <div><button id="btn-new">Nueva partida</button></div>
     <div><button id="btn-chapters">Capítulos</button></div>
-    <div class="help">WASD mover · ratón mirar · Shift correr · E usar · F linterna · Tab diario<br>Juega con audífonos y a oscuras.</div>
+    <div><button id="btn-free">Mundo libre</button></div>
+    <div><button id="btn-quality">Gráficos</button></div>
+    <div class="help">WASD mover · ratón mirar · Shift correr · E usar · F linterna · Tab diario · V cámara · M mapa · Esc pausa y menú<br>Juega con audífonos y a oscuras.</div>
   </div>
   <div id="menu-chapters"><div id="chapter-list"></div><button id="btn-back">Volver</button></div>
 </div>

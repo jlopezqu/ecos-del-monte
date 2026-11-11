@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Prueba de modelos</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#222}#err{position:fixed;left:8px;top:8px;color:#f66;font:13px monospace;white-space:pre-wrap;max-width:90vw}#info{position:fixed;left:8px;bottom:8px;color:#ddd;font:13px monospace}</style>
+</head>
+<body>
+<div id="err"></div>
+<div id="info"></div>
+<script type="module">
+import * as THREE from 'three';
+import { loadModels, makeModelPerson, makeModelAnimal } from './src/models.js';
+
+const err = document.getElementById('err');
+const info = document.getElementById('info');
+const logErr = (m) => { err.textContent += m + '\n'; };
+window.addEventListener('error', (e) => logErr('error: ' + e.message));
+window.addEventListener('unhandledrejection', (e) => logErr('promise: ' + (e.reason?.message || e.reason)));
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x8fa6b8);
+const cam = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 100);
+cam.position.set(0, 1.5, 7.5);
+cam.lookAt(0, 0.9, 0);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x445533, 1.4));
+const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+sun.position.set(3, 6, 5);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6 });
+scene.add(sun);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshStandardMaterial({ color: 0x6b5a3e }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+// regla de 1,68 m
+const ruler = new THREE.Mesh(new THREE.BoxGeometry(0.03, 1.68, 0.03), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+ruler.position.set(-3.6, 0.84, 0);
+scene.add(ruler);
+
+const items = [];
+const ok = await loadModels();
+info.textContent = 'loadModels: ' + ok;
+if (!ok) logErr('loadModels devolvió false');
+else {
+  const params = new URLSearchParams(location.search);
+  // ?a=walk (animación de todas), ?side=1 (de perfil), ?only=campesina (una sola, de cerca)
+  const anim = params.get('a');
+  let looks = [
+    [{ model: 'campesino' }, anim || 'idle'],
+    [{ model: 'campesina', cloth: 0xd8c8b0 }, anim || 'walk'],
+    [{ model: 'campesino-viejo', cloth: 0xffffff }, anim || 'walk'],
+    [{ model: 'campesina-vieja', cloth: 0x9a8a8a }, anim || 'talk'],
+    [{ old: true, skirt: true }, anim || 'idle'],
+  ];
+  if (params.get('only')) { looks = [[{ model: params.get('only') }, anim || 'idle']]; cam.position.set(0, 1.1, 2.6); cam.lookAt(0, 0.95, 0); }
+  looks.forEach(([look, a], i) => {
+    const p = makeModelPerson(look);
+    if (!p) { logErr('makeModelPerson null'); return; }
+    p.root.position.x = looks.length === 1 ? 0 : -3.0 + i * 1.5;
+    if (params.get('side')) p.root.rotation.y = Math.PI / 2;
+    p.play(a, 0);
+    scene.add(p.root);
+    items.push(p);
+  });
+  const dog = params.get('animals') ? makeModelAnimal('perro') : null;
+  if (dog) { dog.root.position.set(2.0, 0, 2.2); dog.root.rotation.y = -0.6; dog.play('walk', 0); scene.add(dog.root); items.push(dog); }
+  const mula = params.get('animals') ? makeModelAnimal('mula') : null;
+  if (mula) { mula.root.position.set(-1.5, 0, -3.5); mula.root.rotation.y = Math.PI / 2; mula.play('walk', 0); scene.add(mula.root); items.push(mula); }
+  info.textContent += ' | ' + items.map((p) => p.kind).join(', ');
+}
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), 0.1);
+  items.forEach((p) => p.update(dt));
+  renderer.render(scene, cam);
+});
+</script>
+</body>
+</html>

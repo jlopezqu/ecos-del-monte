@@ -27,9 +27,9 @@ export const PATASOLA = {
     aurelio: { name: AURELIO, voice: { pitch: 0.7, rate: 0.96 }, look: { cloth: 0x2f3138, pants: 0x1f2024, skin: 0xb98a64, hair: 0x8a8a86 }, idle: [[AURELIO, 'La flota no espera. Y yo tampoco.']] },
     elvia: { name: ELVIA, voice: { f: true, pitch: 1.05, rate: 1.0 }, look: { cloth: 0x7a4a5a, skirt: 0x3a3340, skin: 0xa87a56, longHair: true, hair: 0x2a2420 }, idle: [[ELVIA, 'Aquí se fía hasta el sábado. Lo demás, pregúntele al monte.']] },
     inspector: { name: INSP, voice: { pitch: 0.85, rate: 0.9 }, look: { cloth: 0x5a6048, pants: 0x3a3e30, skin: 0x9a6e4c, hat: 0x5a6048 }, idle: [[INSP, 'Ya le dije lo que hay. Lo que no hay, no me lo pregunte.']] },
-    rosalba: { name: ROSALBA, voice: { f: true, pitch: 1.15, rate: 0.9 }, look: { cloth: 0x4a5a6a, skirt: 0x2a2630, skin: 0xa87a56, longHair: true }, idle: [[ROSALBA, 'Si lo ve… dígale que la comida está servida.']] },
+    rosalba: { name: ROSALBA, voice: { f: true, pitch: 1.15, rate: 0.9 }, look: { cloth: 0x4a5a6a, skirt: 0x2a2630, skin: 0xa87a56, longHair: true, scarf: 0x6a7486 }, idle: [[ROSALBA, 'Si lo ve… dígale que la comida está servida.']] },
     padre: { name: PADRE, voice: { pitch: 0.6, rate: 0.82 }, look: { cloth: 0x121214, skirt: 0x121214, skin: 0xb98a64, hair: 0x9a9a96 }, idle: [[PADRE, 'Rece antes de subir. Y después de bajar, si baja.']] },
-    custodia: { name: CUSTODIA, voice: { f: true, pitch: 0.75, rate: 0.78 }, look: { cloth: 0x5a3a2a, skirt: 0x3a2a22, ruana: 0x6a2a22, skin: 0x8a5e40, longHair: true, hair: 0xb8b4ac }, idle: [[CUSTODIA, 'La candela no se deja morir, mijo. Eso es todo lo que hay que saber.']] },
+    custodia: { name: CUSTODIA, voice: { f: true, pitch: 0.75, rate: 0.78 }, look: { cloth: 0x5a3a2a, skirt: 0x3a2a22, ruana: 0x6a2a22, skin: 0x8a5e40, longHair: true, hair: 0xb8b4ac, scarf: 0x9a8a78 }, idle: [[CUSTODIA, 'La candela no se deja morir, mijo. Eso es todo lo que hay que saber.']] },
     eliecer: { name: ELIECER, voice: { pitch: 1.2, rate: 1.05 }, look: { cloth: 0x6a5a3a, pants: 0x2f2a22, skin: 0xa87a56 }, idle: [[ELIECER, 'No me deje solo mucho rato. Ella sabe que estoy aquí.']] },
   },
 
@@ -254,7 +254,7 @@ export const PATASOLA = {
         {
           type: 'interact', text: 'Consigue tabaco en la tienda y agua bendita en la capilla',
           targets: [
-            { name: 'el tabaco', kind: 'tabaco', at: [-18.6, 8.4], give: 'Tabaco' },
+            { name: 'el tabaco', kind: 'tabaco', at: [-23.2, 6.9], lift: 1.13, exact: true, scale: 1.6, give: 'Tabaco' },   // sobre el mostrador
             { name: 'el agua bendita', kind: 'frasco', at: [1.7, -21.6], give: 'Agua bendita' },
           ],
         },

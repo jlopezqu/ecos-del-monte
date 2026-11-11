@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Prueba de cabezas</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#222}#err{position:fixed;left:8px;top:8px;color:#f66;font:13px monospace;white-space:pre-wrap;max-width:90vw}#info{position:fixed;left:8px;bottom:8px;color:#111;font:12px monospace;white-space:pre-wrap}</style>
+</head>
+<body>
+<div id="err"></div>
+<div id="info"></div>
+<script type="module">
+// Herramienta de desarrollo: cabezas de las cuatro personas de cerca.
+// ?alpha=0.1 (recorte del pelo), ?ry=180 (giro en grados), ?nohair=1 (oculta el pelo de MakeHuman), ?medir=1 (caja de la cabeza)
+import * as THREE from 'three';
+import { loadModels, makeModelPerson } from './src/models.js';
+
+const err = document.getElementById('err'), info = document.getElementById('info');
+window.addEventListener('error', (e) => { err.textContent += 'error: ' + e.message + '\n'; });
+window.addEventListener('unhandledrejection', (e) => { err.textContent += 'promise: ' + (e.reason?.message || e.reason) + '\n'; });
+const Q = new URLSearchParams(location.search);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x9fb2c0);
+const cam = new THREE.PerspectiveCamera(22, innerWidth / innerHeight, 0.1, 100);
+if (Q.has('cuerpo')) { cam.position.set(0, 1.2, 9.5); cam.lookAt(0, 0.85, 0); } else { cam.position.set(0, 1.5, 4.6); cam.lookAt(0, 1.47, 0); }
+const piso = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x6b5a3e })); piso.rotation.x = -Math.PI / 2; scene.add(piso);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x554433, 1.5));
+const sun = new THREE.DirectionalLight(0xffffff, 2.0); sun.position.set(3, 6, 5); scene.add(sun);
+
+const items = [], out = {};
+const ok = await loadModels({ people: ['campesino', 'campesino-viejo', 'campesina', 'campesina-vieja'], animals: false });
+if (!ok) err.textContent += 'loadModels devolvió false\n';
+else {
+  ['campesino', 'campesino-viejo', 'campesina', 'campesina-vieja'].forEach((model, i) => {
+    const p = makeModelPerson({ model });
+    p.root.position.x = (-0.75 + i * 0.5) * (Q.has('cuerpo') ? 2.2 : 1);
+    p.root.rotation.y = (+(Q.get('ry') || 0) * Math.PI) / 180;
+    if (Q.has('huesos')) { p.root.updateMatrixWorld(true); const hv = new THREE.Vector3(), r = {}; for (const n of ['pelvis', 'spine_01', 'spine_02', 'spine_03', 'neck_01', 'head', 'clavicle_l', 'upperarm_l', 'lowerarm_l', 'hand_l', 'thigh_l', 'calf_l', 'foot_l']) { const b = p.root.getObjectByName(n); r[n] = b ? b.getWorldPosition(hv).toArray().map((x) => +x.toFixed(3)) : null; } (out.huesos ||= {})[model] = r; (out.reposo ||= {})[model] = new THREE.Box3().setFromObject(p.root, true).max.y.toFixed(3); p.update(0); p.root.updateMatrixWorld(true); const r2 = {}; for (const n of ['pelvis', 'neck_01', 'head', 'upperarm_l', 'hand_l', 'foot_l']) { const b = p.root.getObjectByName(n); r2[n] = b.getWorldPosition(hv).toArray().map((x) => +x.toFixed(3)); } (out.idle ||= {})[model] = r2; window.__medidas = out; }
+    if (Q.get('a')) p.play(Q.get('a'), 0);
+    p.update(+(Q.get('t') || 0));
+    scene.add(p.root); items.push(p);
+    p.root.traverse((o) => {
+      if (!o.isMesh) return;
+      for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+        if (Q.has('solo') && !/^hair/.test(m.name)) o.visible = false;
+        if (Q.has('mats') && i === +Q.get('mats')) (out.mats ||= []).push({ n: m.name, tipo: m.type, color: m.color.getHexString(), map: m.map ? [m.map.image.width, m.map.image.height, m.map.format, m.map.colorSpace] : null, alphaMap: !!m.alphaMap, transparent: m.transparent, alphaTest: m.alphaTest, side: m.side, opacity: m.opacity, depthWrite: m.depthWrite, verts: o.geometry.getAttribute('position').count, tris: (o.geometry.index ? o.geometry.index.count : o.geometry.getAttribute('position').count) / 3, order: o.renderOrder });
+        if (/^hair/.test(m.name)) {
+          if (Q.has('plano')) { o.material = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide }); }
+          if (Q.has('nohair')) o.visible = false;
+          if (Q.has('alpha')) { m.alphaTest = +Q.get('alpha'); m.needsUpdate = true; }
+        }
+      }
+    });
+    if (Q.has('medir')) {   // caja de los vértices que mueve el hueso de la cabeza, relativa a ese hueso (en metros, ejes del mundo)
+      p.root.updateMatrixWorld(true);
+      const hb = p.bones.head, hp = hb.getWorldPosition(new THREE.Vector3()), v = new THREE.Vector3(), res = {};
+      p.root.traverse((o) => {
+        if (!o.isSkinnedMesh) return;
+        const name = (Array.isArray(o.material) ? o.material[0] : o.material).name, bi = o.skeleton.bones.indexOf(hb);
+        const si = o.geometry.getAttribute('skinIndex'), sw = o.geometry.getAttribute('skinWeight'), box = new THREE.Box3();
+        let n = 0;
+        for (let k = 0; k < si.count; k++) {
+          let w = 0;
+          for (let c = 0; c < 4; c++) if (si.getComponent(k, c) === bi) w += sw.getComponent(k, c);
+          if (w < 0.6) continue;
+          o.getVertexPosition(k, v); v.applyMatrix4(o.matrixWorld); box.expandByPoint(v); n++;
+        }
+        if (n) res[name] = { n, min: box.min.clone().sub(hp).toArray().map((x) => +x.toFixed(3)), max: box.max.clone().sub(hp).toArray().map((x) => +x.toFixed(3)) };
+      });
+      out[model] = { huesoY: +hp.y.toFixed(3), escala: +p.root.children[0].scale.x.toFixed(4), cajas: res };
+    }
+  });
+  if (Q.has('medir') || Q.has('mats')) { window.__medidas = out; info.textContent = JSON.stringify(out); }
+  window.__items = items;
+}
+window.__listo = true;
+renderer.setAnimationLoop(() => renderer.render(scene, cam));
+</script>
+</body>
+</html>

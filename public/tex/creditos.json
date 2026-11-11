@@ -1,0 +1,82 @@
+{
+ "fuente": "ambientCG (https://ambientcg.com), materiales PBR de dominio público (CC0 1.0)",
+ "texturas": [
+  {
+   "nombre": "ground",
+   "ambientCG": "Ground106",
+   "url": "https://ambientcg.com/a/Ground106",
+   "licencia": "CC0 1.0",
+   "px": 1024
+  },
+  {
+   "nombre": "leaves",
+   "ambientCG": "ScatteredLeaves009",
+   "url": "https://ambientcg.com/a/ScatteredLeaves009",
+   "licencia": "CC0 1.0",
+   "px": 1024
+  },
+  {
+   "nombre": "bark",
+   "ambientCG": "Bark014",
+   "url": "https://ambientcg.com/a/Bark014",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "foliage",
+   "ambientCG": "Grass001",
+   "url": "https://ambientcg.com/a/Grass001",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "plaster",
+   "ambientCG": "PaintedPlaster017",
+   "url": "https://ambientcg.com/a/PaintedPlaster017",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "rooftile",
+   "ambientCG": "RoofingTiles014A",
+   "url": "https://ambientcg.com/a/RoofingTiles014A",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "cobble",
+   "ambientCG": "PavingStones150",
+   "url": "https://ambientcg.com/a/PavingStones150",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "planks",
+   "ambientCG": "Planks037A",
+   "url": "https://ambientcg.com/a/Planks037A",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "rock",
+   "ambientCG": "Rock058",
+   "url": "https://ambientcg.com/a/Rock058",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "fabric",
+   "ambientCG": "Fabric086",
+   "url": "https://ambientcg.com/a/Fabric086",
+   "licencia": "CC0 1.0",
+   "px": 512
+  },
+  {
+   "nombre": "zinc",
+   "ambientCG": "CorrugatedSteel005",
+   "url": "https://ambientcg.com/a/CorrugatedSteel005",
+   "licencia": "CC0 1.0",
+   "px": 512
+  }
+ ]
+}

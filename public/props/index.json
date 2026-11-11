@@ -1,0 +1,436 @@
+[
+ {
+  "name": "alacena",
+  "file": "alacena.glb",
+  "size": [
+   1.195,
+   1.182,
+   0.617
+  ],
+  "tris": 2227,
+  "kb": 226,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_cabinet",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "armario",
+  "file": "armario.glb",
+  "size": [
+   0.997,
+   2.569,
+   0.723
+  ],
+  "tris": 966,
+  "kb": 150,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_cabinet_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "balde",
+  "file": "balde.glb",
+  "size": [
+   0.367,
+   0.55,
+   0.342
+  ],
+  "tris": 4499,
+  "kb": 127,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_bucket_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "banca",
+  "file": "banca.glb",
+  "size": [
+   1.165,
+   0.889,
+   0.496
+  ],
+  "tris": 630,
+  "kb": 253,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_bench",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "barril",
+  "file": "barril.glb",
+  "size": [
+   0.742,
+   0.87,
+   0.755
+  ],
+  "tris": 4658,
+  "kb": 139,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wine_barrel_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "botellas",
+  "file": "botellas.glb",
+  "size": [
+   0.676,
+   0.331,
+   0.08
+  ],
+  "tris": 3409,
+  "kb": 173,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wine_bottles_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "cajon",
+  "file": "cajon.glb",
+  "size": [
+   0.825,
+   0.35,
+   0.409
+  ],
+  "tris": 4498,
+  "kb": 122,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_crate_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "cama",
+  "file": "cama.glb",
+  "size": [
+   1.973,
+   1.127,
+   0.855
+  ],
+  "tris": 2715,
+  "kb": 449,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/vintage_day_bed",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "canasto",
+  "file": "canasto.glb",
+  "size": [
+   0.347,
+   0.2,
+   0.254
+  ],
+  "tris": 3278,
+  "kb": 180,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wicker_basket_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "candelero",
+  "file": "candelero.glb",
+  "size": [
+   0.097,
+   0.22,
+   0.099
+  ],
+  "tris": 4493,
+  "kb": 140,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_candlestick",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "cuadro",
+  "file": "cuadro.glb",
+  "size": [
+   0.594,
+   0.841,
+   0.016
+  ],
+  "tris": 2586,
+  "kb": 53,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/hanging_picture_frame_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "escoba",
+  "file": "escoba.glb",
+  "size": [
+   0.49,
+   1.454,
+   0.113
+  ],
+  "tris": 3787,
+  "kb": 220,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_broom",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "estante",
+  "file": "estante.glb",
+  "size": [
+   0.511,
+   1.125,
+   0.367
+  ],
+  "tris": 524,
+  "kb": 288,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_shelves",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "farol",
+  "file": "farol.glb",
+  "size": [
+   0.221,
+   0.53,
+   0.235
+  ],
+  "tris": 3864,
+  "kb": 163,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_lantern_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "jarra",
+  "file": "jarra.glb",
+  "size": [
+   0.275,
+   0.211,
+   0.168
+  ],
+  "tris": 4642,
+  "kb": 62,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/jug_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "lampara_petroleo",
+  "file": "lampara_petroleo.glb",
+  "size": [
+   0.22,
+   0.802,
+   0.22
+  ],
+  "tris": 4762,
+  "kb": 127,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/vintage_oil_lamp",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "machete",
+  "file": "machete.glb",
+  "size": [
+   0.755,
+   0.044,
+   0.061
+  ],
+  "tris": 3032,
+  "kb": 128,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/machete",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "mesa",
+  "file": "mesa.glb",
+  "size": [
+   1.134,
+   0.8,
+   0.706
+  ],
+  "tris": 196,
+  "kb": 204,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/wooden_table_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "mesa_larga",
+  "file": "mesa_larga.glb",
+  "size": [
+   2.406,
+   0.959,
+   1.137
+  ],
+  "tris": 600,
+  "kb": 141,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_table",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "olla",
+  "file": "olla.glb",
+  "size": [
+   0.263,
+   0.178,
+   0.18
+  ],
+  "tris": 2964,
+  "kb": 68,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/pot_enamel_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "olla_barro",
+  "file": "olla_barro.glb",
+  "size": [
+   0.656,
+   0.372,
+   0.502
+  ],
+  "tris": 3592,
+  "kb": 93,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/ceramic_pot",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "silla",
+  "file": "silla.glb",
+  "size": [
+   0.639,
+   1.264,
+   0.662
+  ],
+  "tris": 1246,
+  "kb": 108,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_chair_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "taburete",
+  "file": "taburete.glb",
+  "size": [
+   0.385,
+   0.579,
+   0.406
+  ],
+  "tris": 676,
+  "kb": 88,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/painted_wooden_stool",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "vasija",
+  "file": "vasija.glb",
+  "size": [
+   0.218,
+   0.309,
+   0.218
+  ],
+  "tris": 3044,
+  "kb": 82,
+  "category": "interior",
+  "source": "https://polyhaven.com/a/ceramic_vase_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "anturio",
+  "file": "anturio.glb",
+  "size": [
+   0.896,
+   0.5,
+   1.141
+  ],
+  "tris": 3387,
+  "kb": 84,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/anthurium_botany_01",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "caneca",
+  "file": "caneca.glb",
+  "size": [
+   0.634,
+   0.93,
+   0.639
+  ],
+  "tris": 1473,
+  "kb": 91,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/barrel_03",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "hacha",
+  "file": "hacha.glb",
+  "size": [
+   0.047,
+   0.63,
+   0.214
+  ],
+  "tris": 3348,
+  "kb": 112,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/wooden_axe",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "helecho",
+  "file": "helecho.glb",
+  "size": [
+   0.552,
+   0.287,
+   0.613
+  ],
+  "tris": 784,
+  "kb": 54,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/fern_02",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "matera",
+  "file": "matera.glb",
+  "size": [
+   0.266,
+   0.222,
+   0.263
+  ],
+  "tris": 3080,
+  "kb": 76,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/planter_pot_clay",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "piedra",
+  "file": "piedra.glb",
+  "size": [
+   0.169,
+   0.144,
+   0.32
+  ],
+  "tris": 3174,
+  "kb": 113,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/rock_07",
+  "license": "CC0 1.0"
+ },
+ {
+  "name": "tocon",
+  "file": "tocon.glb",
+  "size": [
+   1.426,
+   0.571,
+   1.589
+  ],
+  "tris": 4100,
+  "kb": 232,
+  "category": "exterior",
+  "source": "https://polyhaven.com/a/tree_stump_01",
+  "license": "CC0 1.0"
+ }
+]
